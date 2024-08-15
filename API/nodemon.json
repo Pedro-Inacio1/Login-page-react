@@ -1,0 +1,9 @@
+{
+    "env" :{
+        "USER" : "root",
+        "PASSWORD" : "kyz24",
+        "DATABASE" : "login",
+        "HOST" : "localhost",
+        "PORT" : 8000
+    }
+}

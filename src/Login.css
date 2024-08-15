@@ -1,0 +1,56 @@
+* {
+    color: black;
+}
+
+.content {
+    text-align: center;
+    margin-top: 10%;
+}
+
+.inputs {
+    display: block;
+}
+
+#email {
+    width: 400px;
+    height: 35px;
+    border-radius: 5px;
+}   
+
+#password {
+    width: 400px;
+    height: 35px;
+    border-radius: 5px;
+}
+
+.inp-password {
+    margin-top: 1%;
+}   
+
+.inp-email {
+    margin-top: 3%;
+}
+
+#submit {
+    width: 150px;
+    height: 45px;
+    border-radius: 5px;
+}
+
+#submit:hover {
+    background: blueviolet;
+    color: #fff;
+    transition: 0.7s;
+    cursor: pointer;
+}
+
+.submit {
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+#register {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
