@@ -4,7 +4,7 @@ const UnlockedPage = () => {
   return (
     <div>
       <p>
-        Você está logado! Graças a isso você conseguiu acessar esse endpoint.
+        Você acessou um endpoint exclusivo para quem está logado!
       </p>
     </div>
   )

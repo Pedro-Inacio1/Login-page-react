@@ -1,8 +1,10 @@
 import { FaUser, FaLock } from 'react-icons/fa'
 
+import { Link } from 'react-router-dom'
+
 import { useState } from 'react'
 
-import '../Login.css'
+import '../CSS/Login.css'
 
 const Login = () => {
 
@@ -12,21 +14,21 @@ const Login = () => {
   const submit = (e) => {
     e.preventDefault()
 
-    fetch(`/GetUser?email=${encodeURIComponent(userName)}&password=${encodeURIComponent(userPassword)}`, {
+    fetch('http://localhost:8000/Register', {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
+      body: {
+        email: userName,
+        userPassword: userPassword
+      }
     })
       .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        if (response.ok) {
+          console.log("funcionou")
         }
-        return response.json();
-      })
-      .then(data => {
-        alert("Trouxe os dados: " + JSON.stringify(data));
       })
       .catch(error => {
-        alert("Não trouxe os dados: " + error);
+        alert("Não funcionou! " + error);
       })
   }
 
@@ -45,10 +47,11 @@ const Login = () => {
         <div className='submit'>
           <button type='submit' id='submit'>Enviar</button>
         </div>
-        <a href='#' id='forgot-password'>Esqueceu a senha?</a>
-
-        <div>
-          <button id='register'>Não tem uma conta? Cadastre-se</button>
+        <div className="forget-password">
+          <Link to="/Register" /> Esqueceu a senha?<Link />
+        </div>
+        <div className="registerAcc">
+          <Link to="/Register"> Não tem uma conta? Cadastre-se </Link>
         </div>
       </form>
     </div>

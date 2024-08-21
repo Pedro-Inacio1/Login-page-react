@@ -1,0 +1,32 @@
+#form {
+    display: flex;
+    justify-content: center;
+}
+
+.content input {
+    width: 350px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.email {
+    text-align: end;
+}
+
+.email input {
+    margin-left: 13%;
+}
+
+.password input {
+    margin-left: 13%;
+}
+
+.password {
+    text-align: end;
+}
