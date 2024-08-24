@@ -1,44 +1,72 @@
-const { conn } = require('../../API/sql')
-const bcrypt = require('bcrypt')
+const { conn } = require('../../API/sql');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 class LoginRepository {
 
-    async Create (data) {
-        const sql = 'INSERT INTO login SET ?'
+    async Create(nome, email, senha) {
         return new Promise((resolve, reject) => {
-            conn.query(sql, data, (error, result) => {
-                if(error) {
-                    console.error('erro na query' + error)
-                    reject("Erro na requisição")
+
+            bcrypt.hash(senha, 10, (errCrypt, hash) => {
+                if (errCrypt) {
+                    return reject({ message: 'Erro na criptografia', errCrypt });
                 }
-                else {
-                    const line = JSON.parse(JSON.stringify(result))
-                    resolve(line) 
-                }
+
+                const sql = 'INSERT INTO login (nome, email, senha) VALUES (?, ?, ?)'
+                conn.query(sql, [nome, email, hash], (error, result) => {
+                    if (error) {
+                        console.error('erro na query' + error)
+                        reject("Erro na requisição")
+                    }
+                    else {
+                        const line = JSON.parse(JSON.stringify(result))
+                        resolve(line)
+                    }
+                })
             })
         })
     }
 
-    async getUser(email, password) {
-        const cmd = 'SELECT email, password FROM login WHERE email = ? AND senha = ?';
+    async getUser(email, senha) {
         return new Promise((resolve, reject) => {
-            conn.query(cmd, [email, password], (error, results) => {
-                if(error) {
-                    reject('Usuário não encontrado!')
+            const cmd = 'SELECT * FROM login WHERE email = ?';
+            conn.query(cmd, [email], (error, results) => {
+                if (error) {
+                    return reject('Usuário não encontrado!')
                 }
-                else {
-                    const line = JSON.parse(JSON.stringify(results));
-                    bcrypt.compare(password, results[0].password, (err, result) => {
-                        if(err) {
-                            res.status(401).send({ message : 'Falha na autenticação' })
-                        }
-                        if(result) {
-                            res.status(200).send({ message : 'Autenticação realizada com sucesso!'})
-                            resolve(line);
-                        }
-                        return res.status(401).send({ message : 'Falha na autenticação2'})
-                    })
+
+                if (results.length === 0) {
+                    return reject("Não autorizado")
                 }
+
+                const storedHash = results[0].senha;
+
+                bcrypt.compare(senha, storedHash, (err, result) => {
+                    if (err) {
+                        return reject("Erro na comparação");
+                    }
+
+                    if (result) {
+                        let token = jwt.sign({
+                            id: results[0].id,
+                            name: results[0].nome,
+                            email: results[0].email
+                        },
+                            process.env.JWT_KEY,
+                            {
+                                expiresIn: "1h"
+                            })
+
+                        resolve({
+                            message: "Autenticação realizada com sucesso!",
+                            token: token
+                        });
+                    }
+                    else {
+                        reject("Falha na autenticação");
+                    }
+                })
+
             });
         });
     }

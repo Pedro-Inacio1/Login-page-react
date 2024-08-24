@@ -12,11 +12,6 @@ app.use(express.json())
 
 app.use(morgan('dev'));
 
-const user = {
-    email: String,
-    password: String
-} 
-
 app.post('/Register', LoginController.Registration)
 app.post('/GetUser', LoginController.User)
 

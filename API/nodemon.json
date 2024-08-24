@@ -4,6 +4,7 @@
         "PASSWORD" : "kyz24",
         "DATABASE" : "login",
         "HOST" : "localhost",
-        "PORT" : 8000
+        "PORT" : 8000,
+        "JWT_KEY" : 1234567
     }
 }

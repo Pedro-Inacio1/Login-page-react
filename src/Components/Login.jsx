@@ -8,23 +8,25 @@ import '../CSS/Login.css'
 
 const Login = () => {
 
-  const [userName, setUserName] = useState("")
+  const [userEmail, setUserEmail] = useState("")
   const [userPassword, setUserpassword] = useState("")
 
   const submit = (e) => {
     e.preventDefault()
 
-    fetch('http://localhost:8000/Register', {
-      method: 'GET',
+    const url = 'http://localhost:8000/GetUser'
+
+    fetch(url , {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: {
-        email: userName,
-        userPassword: userPassword
-      }
+      body: JSON.stringify({
+        email: userEmail,
+        senha: userPassword
+      })
     })
       .then(response => {
         if (response.ok) {
-          console.log("funcionou")
+          alert("Usuário autenticado com sucesso!")
         }
       })
       .catch(error => {
@@ -37,7 +39,7 @@ const Login = () => {
       <form id='form' onSubmit={submit}>
         <h1>Login Page</h1>
         <div id="inp-email" className="inp-email">
-          <input type="email" placeholder="Digite seu email" id="email" onChange={(e) => setUserName(e.target.value)}></input>
+          <input type="email" placeholder="Digite seu email" id="email" onChange={(e) => setUserEmail(e.target.value)}></input>
           <FaUser className='icon' />
         </div>
         <div id='inp-password' className='inp-password'>

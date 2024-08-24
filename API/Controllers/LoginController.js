@@ -4,8 +4,8 @@ class LoginController {
 
     async Registration(req, res) {
         try {
-            const data = req.body
-            const row = await LoginRepository.Create(data)
+            const { nome, email, senha } = req.body
+            const row = await LoginRepository.Create(nome, email, senha)
             res.status(201).send(row)
         }
         catch {
@@ -15,17 +15,16 @@ class LoginController {
 
     async User(req, res) {
         try {
-            const { email , password } = req.body
-            const row = await LoginRepository.getUser(email, password);
-            res.json(row)
+            const { email , senha } = req.body
+            const line = await LoginRepository.getUser(email, senha);
+            res.status(200).send(line);
         }
         catch {
             res.status(500).json({
-                message : "Erro interno no servidor, tente novamente mais tarde!"
+                message : "Credenciais inválidas!"
             })
         }
     }
 }
-
 
 module.exports =  new LoginController()
