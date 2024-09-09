@@ -1,5 +1,7 @@
 import '../CSS/Register.css'
 
+import { api } from '../Services/api'
+
 import React, { useState } from "react"
 
 const Register = () => {
@@ -8,54 +10,30 @@ const Register = () => {
     const [email, setUserEmail] = useState("");
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
- 
-    async function handleSubmit(e) {
+
+    const handleSaveUser = async (e) => {
         e.preventDefault();
 
-        if (!userName || !email || !password || !repeatPassword) {
-            alert("preencha todos os campos corretamente!")
-            return;
-        }
-        
-        if (password !== repeatPassword) {
-            alert("As senhas não coincidem!")
-            return;
+        const data = {
+            nome : userName,
+            email : email ,
+            senha : password
         }
 
-        const url = 'http://localhost:8000/Register';
-
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nome: userName,
-                    email: email,
-                    senha: password
-                })
-            })
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message);
-            }
-            alert("cadastro realizado com sucesso!");
-        }
-        catch(error) {
-            alert('Não foi possível realizar o cadastro!' + error.message)
-        }
-
+        const response = await api.post("/Register", data);
+        console.log(response.data)
     }
 
     return (
-        <form onSubmit={handleSubmit} id='form'>
+        <form onSubmit={handleSaveUser} id='form'>
             <div className='content'>
                 <h1>Cadastro</h1>
                 <div className="name">
                     <label> Nome completo:
                         <input type="text"
                             value={userName}
-                            onChange={(e) => 
-                            setUserName(e.target.value)} />
+                            onChange={(e) =>
+                                setUserName(e.target.value)} />
                     </label>
                 </div>
                 <div className="email">
@@ -85,6 +63,6 @@ const Register = () => {
             </div>
         </form>
     )
-}
 
+}
 export default Register
