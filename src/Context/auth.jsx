@@ -1,94 +1,44 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from 'react';
 
-import { api } from "../Services/api";
+const AuthContext = createContext();
 
-const Context = createContext();
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [error, setError] = useState(null);
 
-function AuthProvider({ children }) {
-
-    const [ Authenticated, setAuthenticated] = useState(false)
-
-    async function HandleLogin(data) {
+    const login = async (email, senha) => {
         try {
-            const { data: { token } } = await api.post('/GetUser', data)
-    
-            localStorage.setItem('token', JSON.stringify(token))
-            api.defaults.headers['x-acess-token'] = token;
-            setAuthenticated(true);
-            return true;
-        }
-        catch(error) {
-            console.error('Erro na autenticação :' + error)
-            setAuthenticated(false);
-            return false;
-        }
+            const response = await fetch('http://localhost:8000/GetUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, senha }),
+            });
 
+            if (!response.ok) {
+                throw new Error('Credenciais inválidas!');
+            }
+
+            const data = await response.json();
+            setUser(data);
+            setError(null); 
+        } catch (err) {
+            setError(err.message);
         }
+    };
+
+    const logout = () => {
+        setUser(null);
+    };
 
     return (
-        <Context.Provider value={{ Authenticated, HandleLogin }}>
-            { children }
-        </Context.Provider>
-    )
-}
+        <AuthContext.Provider value={{ user, setUser, login, logout, error }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
 
-export { Context, AuthProvider };
-
-
-
-
-// import { createContext, useEffect, useState } from "react";
-// import { api } from "../Services/api";
-
-// export const AuthContext = createContext()
-
-// export const AuthProvider = ({children}) => {
-
-//     const [user, setUser] = useState(null)
-
-//     useEffect(() => {
-//         const loadStoreData = async() => {
-    
-//             const storageUser = localStorage.getItem("@Auth:user")
-//             const storageToken = localStorage.getItem("@Auth:token")
-    
-//             if(storageUser && storageToken) {
-//                 setUser(storageUser)
-//             }
-//         }
-//         loadStoreData();
-//     }, [])
-
-
-    
-//     const SignIn = async({email, senha}) => {
-//         const response = await api.post("/GetUser", {
-//             email,
-//             senha
-//         });
-
-//         if(response.data.error) {
-//             alert(response.data.error)
-//         }
-//         else {
-//             setUser(response.data)
-//             api.defaults.headers.common[
-//                 "Authorization"
-//             ]
-//             localStorage.setItem("@Auth:token", response.data.token)
-//             localStorage.setItem("@Auth:user", response.data.user)
-//         }
-       
-//     }
-
-
-//     return(
-//         <AuthContext.Provider value={{
-//             user,
-//             signed : !!user,
-//             SignIn
-//         }} >
-//             {children}
-//         </AuthContext.Provider>
-//     )
-// }
+export const useAuth = () => {
+    return useContext(AuthContext);
+};

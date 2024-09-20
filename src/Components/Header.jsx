@@ -10,16 +10,6 @@ const Header = () => {
             <nav>
                 <ul>
                     <li>
-                        <Link to="/Home">
-                            Home
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/About">
-                            Sobre nós
-                        </Link>
-                    </li>
-                    <li>
                         <Link to="/Login">
                             Entrar ou se cadastrar
                         </Link>

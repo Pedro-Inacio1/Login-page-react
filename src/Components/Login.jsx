@@ -1,67 +1,67 @@
-import { FaUser, FaLock } from 'react-icons/fa'
-import '../CSS/Login.css'
-import { Link, useNavigate } from 'react-router-dom'
-import { Navigate } from 'react-router-dom'
-
-import { useContext, useState } from 'react'
-
-import { Context } from '../Context/auth'
+import React, { useState } from 'react';
+import { useAuth } from '../Context/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-
-  const [userEmail, setUserEmail] = useState("")
-  const [userPassword, setUserpassword] = useState("")
-  const [errorMessage, setErrorMessage] = useState("")
-  const [sucessMessage, setSucessMessage] = useState("")
-
-  const { HandleLogin } = useContext(Context);
+  const { setUser } = useAuth();
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [error, setError] = useState('');
+  
   const navigate = useNavigate();
 
-  const HandleSubmit = async (e) => {
-    e.preventDefault()
-    const data = {
-      email: userEmail,
-      senha: userPassword
-    }
-    const sucess = await HandleLogin(data);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:8000/GetUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, senha }),
+            });
 
-    if(!sucess) {
-      setErrorMessage('Falha na autenticação. Verifique as suas credenciais')
-    }
-    else {
-      setErrorMessage('');
-      setSucessMessage('Login bem-sucedido!')
-      navigate('/Home');
-    }
-  }
+            if (!response.ok) {
+                throw new Error('Credenciais inválidas!');
+            }
 
-  return (
-    <div id="content" className="content">
-      <form id='form' onSubmit={HandleSubmit}>
-        <h1>Login Page</h1>
-        <div id="inp-email" className="inp-email">
-          <input type="email" placeholder="Digite seu email" id="email" onChange={(e) => setUserEmail(e.target.value)}></input>
-          <FaUser className='icon' />
-        </div>
-        <div id='inp-password' className='inp-password'>
-          <input type="password" placeholder="Digite sua senha" id="password" onChange={(e) => setUserpassword(e.target.value)}></input>
-          <FaLock className='icon' />
-        </div>
-        <div className='submit'>
-          <button type='submit' id='submit'>Enviar</button>
-          {errorMessage && <p>{errorMessage}</p>}
-          {sucessMessage && <p>{sucessMessage}</p>}
-        </div>
-        <div className="forget-password">
-          <Link to="/Register" /> Esqueceu a senha?<Link />
-        </div>
-        <div className="registerAcc">
-          <Link to="/Register"> Não tem uma conta? Cadastre-se </Link>
-        </div>
-      </form>
-    </div>
-  )
-}
+            const data = await response.json();
+            setUser(data); 
 
+            const token = data.token; 
+            localStorage.setItem('token', token); 
+            alert('Usuário autenticado com sucesso!');
+            navigate('/Home')
 
-export default Login
+            setError('');
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    return (
+        <div>
+            <h2>Login</h2>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+                <input
+                    type="password"
+                    placeholder="Senha"
+                    value={senha}
+                    onChange={(e) => setSenha(e.target.value)}
+                    required
+                />
+                <button type="submit">Entrar</button>
+            </form>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+        </div>
+    );
+};
+
+export default Login;

@@ -1,3 +1,4 @@
-.result {
-    color: #fff;
+.Home {
+    display: flex;
+    justify-content: center;
 }

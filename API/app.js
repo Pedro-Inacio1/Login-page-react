@@ -16,6 +16,6 @@ app.use(morgan('dev'));
 
 app.post('/Register', LoginController.Registration)
 app.post('/GetUser', LoginController.User)
-app.get('/Products', login ,HomeController.getProducts)
+// app.get('/Products', login ,HomeController.getProducts)
 
 module.exports = app;
