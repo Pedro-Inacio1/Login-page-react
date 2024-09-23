@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import '../CSS/RecoverPassword.css'
 
 const RecoverPassword = () => {
 
@@ -39,14 +40,16 @@ const RecoverPassword = () => {
     }
     return (
 
-        <div>
-            <form onSubmit={HandleRecover}>
-                <input type="text" placeholder='Digite a frase de recuperação de senha' onChange={(e) => setPhraseRecover(e.target.value)} />
+        <div id='contentRecover'>
+            <form onSubmit={HandleRecover} id='formRecover'>
+                <div className="inputsRecover">
                 <input type="text" placeholder='Digite o seu email' onChange={(e) => setRecoverEmail(e.target.value)} />
                 <input type="text" id="newPassword" placeholder='Nova senha' onChange={(e) => setNewPassword(e.target.value)} />
                 <input type="text" id="confirmNewPassword" placeholder='Confirmar senha' onChange={(ev) => setConfirmNewPassword(ev.target.value)} />
+                <input type="text" placeholder='Digite a frase de recuperação de senha' onChange={(e) => setPhraseRecover(e.target.value)} />
 
                 <button type='submit'>Salvar</button>
+                </div>
             </form>
         </div>
     )

@@ -5,13 +5,17 @@ import '../CSS/header.css'
 const Header = () => {
     return (
         <header>
-            <img src='https://imgs.search.brave.com/6G7zt1sAiBDd6K-4-6DSN9usZYxcjuacCiLB6-f-Gac/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9kaWNp/b25hcmlvLnByaWJl/cmFtLm9yZy9pbWcv/ZGljaW9uYXJpb19z/aW5nbGUud2VicA' width={80} height={80} />
             <h1> Hello word</h1>
             <nav>
                 <ul>
                     <li>
                         <Link to="/Login">
-                            Entrar ou se cadastrar
+                            Entrar
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/Register">
+                            Cadastre-se
                         </Link>
                     </li>
                     <li>

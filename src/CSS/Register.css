@@ -1,6 +1,7 @@
 #form {
     display: flex;
     justify-content: center;
+    margin-top: 5%;
 }
 
 .content input {
@@ -12,6 +13,7 @@
 .content {
     display: flex;
     flex-direction: column;
+    text-align: center;
     gap: 24px;
 }
 
@@ -19,14 +21,16 @@
     text-align: end;
 }
 
-.email input {
-    margin-left: 13%;
+#submit {
+    width: 200px;
+    height: 45px;
+    border-radius: 10px;
 }
 
-.password input {
-    margin-left: 13%;
-}
-
-.password {
-    text-align: end;
+#submit:hover {
+    background-color: blueviolet;
+    color: #fff;
+    transition: 0.4s;
+    border-radius: 5px solid black;
+    cursor: pointer;
 }

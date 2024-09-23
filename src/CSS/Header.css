@@ -8,14 +8,15 @@
 
 header {
     display: flex;
+    height: 70px;
     align-items: center;
     justify-content: space-between;
-    margin-right: 2%;
+    box-shadow: 1px 1px 3px 1px black;
 }
 
 nav ul {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 nav ul a:hover {
