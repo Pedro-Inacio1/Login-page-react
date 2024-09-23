@@ -59,7 +59,8 @@ class LoginRepository {
 
                         resolve({
                             message: "Autenticação realizada com sucesso!",
-                            token: token
+                            token: token,
+                            name: results[0].nome
                         });
                     }
                     else {
@@ -70,6 +71,22 @@ class LoginRepository {
             });
         });
     }
+
+    async recoverPassword(newPassword, email, phrase) {
+        try {
+          const hash = await bcrypt.hash(newPassword, 10);
+          const sql = 'UPDATE login SET senha = ? WHERE email = ? and frase = ?';
+          const [result] = await conn.promise().query(sql, [hash, email, phrase]);
+          
+          if (result.affectedRows === 0) {
+            throw new Error("Email ou frase de recuperação incorretos");
+          }
+          
+          return { message: "Senha atualizada com sucesso" };
+        } catch (error) {
+          throw { message: "Email ou frase de recuperação inválido!" };
+        }
+      }
 }
 
 module.exports = new LoginRepository()

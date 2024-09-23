@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useAuth } from '../Context/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import '../CSS/Login.css'
 
 const Login = () => {
-  const { setUser } = useAuth();
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [error, setError] = useState('');
-  
-  const navigate = useNavigate();
+    const { setUser } = useAuth();
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [error, setError] = useState('');
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,10 +27,10 @@ const Login = () => {
             }
 
             const data = await response.json();
-            setUser(data); 
+            setUser(data);
 
-            const token = data.token; 
-            localStorage.setItem('token', token); 
+            const token = data.token;
+            localStorage.setItem('token', token);
             alert('Usuário autenticado com sucesso!');
             navigate('/Home')
 
@@ -40,27 +41,34 @@ const Login = () => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Senha"
-                    value={senha}
-                    onChange={(e) => setSenha(e.target.value)}
-                    required
-                />
-                <button type="submit">Entrar</button>
+        <div className='contentLogin'>
+            <h2 id='title'>Login</h2>
+            <form id='formLogin' onSubmit={handleSubmit}>
+                <div className="inputs">
+                    <input
+                        className='inp-email'
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder="Senha"
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
+                        required
+                    />
+                    <button type="submit" id='submitLogin'>Entrar</button>
+                    </div>
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-        </div>
+            <div className="options">
+                <Link to={'/Register'}>Cadastre-se</Link>
+                <Link to={'/Recover'}>Esqueceu a senha?</Link>
+            </div>
+        </div >
     );
 };
 

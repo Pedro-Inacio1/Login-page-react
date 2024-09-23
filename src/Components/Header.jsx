@@ -14,6 +14,11 @@ const Header = () => {
                             Entrar ou se cadastrar
                         </Link>
                     </li>
+                    <li>
+                        <Link to="/Home">
+                            Home
+                        </Link>
+                    </li>
                 </ul>
             </nav>
         </header>

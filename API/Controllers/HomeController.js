@@ -12,4 +12,4 @@ class HomeController {
     }
 }
 
-module.exports = new HomeController
+module.exports = new HomeController()

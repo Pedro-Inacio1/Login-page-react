@@ -1,5 +1,4 @@
 const { conn } = require('../sql');
-const login = require('../Middleware/Login');
 
 class HomeRepository {
 
